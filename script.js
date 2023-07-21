@@ -36,4 +36,5 @@ let value = btn.forEach(btn => {
     })
 });
 
+// button event listeners
 clearButton.addEventListener('click', clearInput);
