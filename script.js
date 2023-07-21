@@ -5,6 +5,7 @@ let currentScreen = document.querySelector(".screen-current");
 let lastScreen = document.querySelector(".screen-last");
 let clearButton = document.querySelector(".clear");
 let deleteButton = document.querySelector(".delete");
+let positiveNegative = document.getElementById('positive-negative');
 let currentInput = '0';
 let lastInput = '0';
 let operator = '';
@@ -44,11 +45,26 @@ const handleNumberClick = (num) => {
         currentInput += num.toString(num);
     };
     displayCurrentInput();
+};
+
+const togglePositiveNegative = () => {
+    if (currentInput !== '0') {
+        if (currentInput[0] === '-') {
+            // make positive
+            currentInput = currentInput.slice(1);
+        } else {
+            // make negative
+            currentInput = '-' + currentInput;
+        }
+    };
+    displayCurrentInput();
 }
 
 // button event listeners
 clearButton.addEventListener('click', clearInput);
 deleteButton.addEventListener('click', deleteLastDigit);
+positiveNegative.addEventListener('click', togglePositiveNegative);
+
 
 // button functionality
 let value = btn.forEach(btn => {
