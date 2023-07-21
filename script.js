@@ -1,6 +1,7 @@
 console.log("Keep Going 🍊");
 // DOM Maninpulation
 let btn = document.querySelectorAll(".num");
+let operatorButtons = document.querySelectorAll(".operator");
 let currentScreen = document.querySelector(".screen-current");
 let lastScreen = document.querySelector(".screen-last");
 let clearButton = document.querySelector(".clear");
@@ -25,7 +26,7 @@ const clearInput = () => {
     currentInput = '0';
     lastInput = '0';
     operator = '';
-    // displayLastInput();
+    displayLastInput();
     displayCurrentInput();
 };
 
@@ -38,12 +39,22 @@ const deleteLastDigit = () => {
     displayCurrentInput();
 };
 
+// add number to the display string 
 const handleNumberClick = (num) => {
     if (currentInput === '0' || currentInput === '-0') {
         currentInput = num.toString(num);
     } else {
         currentInput += num.toString(num);
     };
+    displayCurrentInput();
+};
+
+// handles (+ * - /) buttons and last input window
+const handleOperatorClick = (op) => {
+    operator = op;
+    lastInput = `${currentInput} ${op}`;
+    // currentInput = '0';
+    displayLastInput();
     displayCurrentInput();
 };
 
@@ -75,3 +86,9 @@ let value = btn.forEach(btn => {
         handleNumberClick(btn.textContent);
     })
 });
+
+let operators = operatorButtons.forEach(operator => {
+    operator.addEventListener("click", () => {
+        handleOperatorClick(operator.textContent);
+    });
+}); 
