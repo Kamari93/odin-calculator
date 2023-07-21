@@ -1,6 +1,6 @@
 console.log("Keep Going 🍊");
 // DOM Maninpulation
-let btn = document.querySelectorAll(".btn");
+let btn = document.querySelectorAll(".num");
 let currentScreen = document.querySelector(".screen-current");
 let lastScreen = document.querySelector(".screen-last");
 let clearButton = document.querySelector(".clear");
@@ -37,15 +37,25 @@ const deleteLastDigit = () => {
     displayCurrentInput();
 };
 
-// button functionality
-let value = btn.forEach(btn => {
-    btn.addEventListener("click", () => {
-        // console.log(btn.textContent);
-        currentScreen.textContent = `${btn.textContent}`;
-        return btn.textContent;
-    })
-});
+const handleNumberClick = (num) => {
+    if (currentInput === '0' || currentInput === '-0') {
+        currentInput = num.toString(num);
+    } else {
+        currentInput += num.toString(num);
+    };
+    displayCurrentInput();
+}
 
 // button event listeners
 clearButton.addEventListener('click', clearInput);
 deleteButton.addEventListener('click', deleteLastDigit);
+
+// button functionality
+let value = btn.forEach(btn => {
+    btn.addEventListener("click", () => {
+        // console.log(btn.textContent);
+        // currentScreen.textContent = `${btn.textContent}`;
+        // return btn.textContent;
+        handleNumberClick(btn.textContent);
+    })
+});
