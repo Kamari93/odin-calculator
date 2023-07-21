@@ -7,6 +7,7 @@ let lastScreen = document.querySelector(".screen-last");
 let clearButton = document.querySelector(".clear");
 let deleteButton = document.querySelector(".delete");
 let positiveNegative = document.getElementById('positive-negative');
+let equalButton = document.getElementById('equal');
 let currentInput = '0';
 let lastInput = '0';
 let operator = '';
@@ -51,9 +52,39 @@ const handleNumberClick = (num) => {
 
 // handles (+ * - /) buttons and last input window
 const handleOperatorClick = (op) => {
+    if (operator && lastInput !== '0') {
+        calculate();
+    };
     operator = op;
     lastInput = `${currentInput} ${op}`;
-    // currentInput = '0';
+    currentInput = '0';
+    displayLastInput();
+    displayCurrentInput();
+};
+
+const calculate = () => {
+    const num1 = parseFloat(lastInput);
+    const num2 = parseFloat(currentInput);
+
+    switch (operator) {
+        case '+':
+            currentInput = (num1 + num2).toString();
+            break;
+        case '-':
+            currentInput = (num1 - num2).toString();
+            break;
+        case '*':
+            currentInput = (num1 * num2).toString();
+            break;
+        case '+':
+            currentInput = (num1 / num2).toString();
+            break;
+        default:
+            return;
+    };
+    // reset the operator and last input after calc
+    operator = '';
+    lastInput = '0';
     displayLastInput();
     displayCurrentInput();
 };
@@ -75,6 +106,7 @@ const togglePositiveNegative = () => {
 clearButton.addEventListener('click', clearInput);
 deleteButton.addEventListener('click', deleteLastDigit);
 positiveNegative.addEventListener('click', togglePositiveNegative);
+equalButton.addEventListener('click', calculate);
 
 
 // button functionality
