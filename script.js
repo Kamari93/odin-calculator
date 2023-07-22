@@ -9,8 +9,10 @@ let deleteButton = document.querySelector(".delete");
 let positiveNegative = document.getElementById('positive-negative');
 let equalButton = document.getElementById('equal');
 let currentInput = '0';
-let lastInput = '0';
+let lastInput = '';
 let operator = '';
+
+// lastScreen.textContent = '';
 
 // Screen functionality 
 const displayCurrentInput = () => {
@@ -25,7 +27,7 @@ displayLastInput();
 
 const clearInput = () => {
     currentInput = '0';
-    lastInput = '0';
+    lastInput = '';
     operator = '';
     displayLastInput();
     displayCurrentInput();
@@ -58,6 +60,7 @@ const handleOperatorClick = (op) => {
     operator = op;
     lastInput = `${currentInput} ${op} `;
     currentInput = '0';
+    // currentInput = currentScreen.textContent;
     displayLastInput();
     displayCurrentInput();
 };
@@ -122,6 +125,7 @@ let value = btn.forEach(btn => {
 
 let operators = operatorButtons.forEach(operator => {
     operator.addEventListener("click", () => {
+
         handleOperatorClick(operator.textContent);
         // lastInput = `${lastInput} ${currentInput}`;
         // lastInput += ' =';
@@ -132,4 +136,4 @@ let operators = operatorButtons.forEach(operator => {
 // replaceAt string function
 String.prototype.replaceAt = function (index, replacement) {
     return this.substring(0, index) + replacement + this.substring(index + replacement.length);
-}
+};
