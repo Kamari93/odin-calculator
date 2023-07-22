@@ -54,7 +54,7 @@ const handleNumberClick = (num) => {
 
 // handles (+ * - /) buttons and last input window
 const handleOperatorClick = (op) => {
-    if (operator && lastInput !== '0') {
+    if (operator !== '0' && lastInput !== '0') {
         calculate();
     };
     operator = op;
@@ -85,6 +85,7 @@ const calculate = () => {
         default:
             return;
     };
+
     // reset the operator and last input after calc
     operator = '';
     // lastInput = lastInput + currentInput;
@@ -126,6 +127,7 @@ let value = btn.forEach(btn => {
 let operators = operatorButtons.forEach(operator => {
     operator.addEventListener("click", () => {
 
+        // if (currentInput !== '0') { handleOperatorClick(operator.textContent); }
         handleOperatorClick(operator.textContent);
         // lastInput = `${lastInput} ${currentInput}`;
         // lastInput += ' =';
