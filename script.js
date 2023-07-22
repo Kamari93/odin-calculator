@@ -56,7 +56,7 @@ const handleOperatorClick = (op) => {
         calculate();
     };
     operator = op;
-    lastInput = `${currentInput} ${op}`;
+    lastInput = `${currentInput} ${op} `;
     currentInput = '0';
     displayLastInput();
     displayCurrentInput();
@@ -76,7 +76,7 @@ const calculate = () => {
         case '*':
             currentInput = (num1 * num2).toString();
             break;
-        case '+':
+        case '÷':
             currentInput = (num1 / num2).toString();
             break;
         default:
@@ -84,7 +84,8 @@ const calculate = () => {
     };
     // reset the operator and last input after calc
     operator = '';
-    lastInput = '0';
+    // lastInput = lastInput + currentInput;
+    lastInput += `${num2} ${equalButton.textContent}`;
     displayLastInput();
     displayCurrentInput();
 };
@@ -122,5 +123,13 @@ let value = btn.forEach(btn => {
 let operators = operatorButtons.forEach(operator => {
     operator.addEventListener("click", () => {
         handleOperatorClick(operator.textContent);
+        // lastInput = `${lastInput} ${currentInput}`;
+        // lastInput += ' =';
+        // lastInput = lastInput.replaceAt(lastInput.length - 1, equalButton.textContent);
     });
-}); 
+});
+
+// replaceAt string function
+String.prototype.replaceAt = function (index, replacement) {
+    return this.substring(0, index) + replacement + this.substring(index + replacement.length);
+}
