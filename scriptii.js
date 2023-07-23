@@ -1,17 +1,29 @@
 console.log("Keep Going 🍊");
 // DOM Maninpulation
-let btn = document.querySelectorAll(".num");
-let operatorButtons = document.querySelectorAll(".operator");
-let currentScreen = document.querySelector(".screen-current");
-let lastScreen = document.querySelector(".screen-last");
-let clearButton = document.querySelector(".clear");
-let deleteButton = document.querySelector(".delete");
-let positiveNegative = document.getElementById('positive-negative');
-let equalButton = document.getElementById('equal');
+const numberButtons = document.querySelectorAll(".num");
+const operatorButtons = document.querySelectorAll(".operator");
+const currentScreen = document.querySelector(".screen-current");
+const lastScreen = document.querySelector(".screen-last");
+const clearButton = document.querySelector(".clear");
+const deleteButton = document.querySelector(".delete");
+const pointButton = document.querySelector(".point");
+const positiveNegative = document.getElementById('positive-negative');
+const equalButton = document.getElementById('equal');
+
+
+// button event listeners
+clearButton.addEventListener('click', clearInput);
+deleteButton.addEventListener('click', deleteLastDigit);
+positiveNegative.addEventListener('click', togglePositiveNegative);
+equalButton.addEventListener('click', calculate);
+pointButton.addEventListener("click", appendDecimal);
+
+// input variables for screen calculations
 let currentInput = '0';
 let lastInput = '';
 let operator = '';
 let shouldReset = true;
+currentOperation = null;
 
 // lastScreen.textContent = '';
 
@@ -66,6 +78,35 @@ const handleOperatorClick = (op) => {
     displayCurrentInput();
 };
 
+// deals with decimal vals
+const appendDecimal = () => {
+    // reset screen if eval func or other func triggers it to be true
+    if (shouldReset) resetScreen(); //create this funct
+    // if empty input while decimal has been clicked auto add zero before the decimal
+    if (currentScreen.textContent === '') currentScreen.textContent = '0';
+    // handles if input already has decimal so multiples can't be added
+    if (currentScreen.textContent.includes('.')) return;
+    // else if button pressed append decimal to input
+    currentScreen.textContent += '.';
+};
+
+const handleKeyboardInput = (e) => {
+    if (e.key >= 0 && e.key <= 9) appendNumber(e.key); //create this funct
+    if (e.key === '.') appendDecimal();
+    if (e.key === '=' || e.key === 'Enter') evaluate();
+    if (e.key === 'Backspace') deleteLastDigit();
+    if (e.key === 'Escape') clear(); //refactor
+    if (e.key === '+' || e.key === '-' || e.key === '*' || e.key === '/') setOperation(convertOperator(e.key));
+};
+
+// for keyboard input
+const convertOperator = (keyboardOperator) => {
+    if (keyboardOperator === '/') return '÷';
+    if (keyboardOperator === '*') return '×';
+    if (keyboardOperator === '-') return '−';
+    if (keyboardOperator === '+') return '+';
+};
+
 const calculate = () => {
     const num1 = parseFloat(lastInput);
     const num2 = parseFloat(currentInput);
@@ -106,17 +147,10 @@ const togglePositiveNegative = () => {
         }
     };
     displayCurrentInput();
-}
-
-// button event listeners
-clearButton.addEventListener('click', clearInput);
-deleteButton.addEventListener('click', deleteLastDigit);
-positiveNegative.addEventListener('click', togglePositiveNegative);
-equalButton.addEventListener('click', calculate);
-
+};
 
 // button functionality
-let value = btn.forEach(btn => {
+let value = numberButtons.forEach(btn => {
     btn.addEventListener("click", () => {
         // console.log(btn.textContent);
         // currentScreen.textContent = `${btn.textContent}`;
