@@ -1,5 +1,6 @@
 # odin-calculator
-A calculator app using html, css, js. inspired by michalosman's calculator app https://github.com/michalosman/calculator
+A calculator app using html, css, js inspired by michalosman's calculator app https://github.com/michalosman/calculator.
+
 Calculator Features:
 1. add, subtract, multiply, divide
 2. calculate 2 numbers at a time 
