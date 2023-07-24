@@ -79,10 +79,9 @@ function calculate() {
         return;
     };
     lastInput = currentScreen.textContent;
-    // currentScreen.textContent = roundCalc(operate(currentOperation, firstInput, lastInput));
     currentScreen.textContent = roundCalc(
-        operate(currentOperation, firstInput, lastInput)
-    )
+        operate(currentOperation, firstInput, lastInput));
+
     lastScreen.textContent = `${firstInput} ${currentOperation} ${lastInput} =`;
     // set current  operation to empty after eval for new eval
     currentOperation = null;
