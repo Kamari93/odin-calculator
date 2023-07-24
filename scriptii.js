@@ -93,7 +93,7 @@ const roundCalc = (number) => {
 const handleKeyboardInput = (e) => {
     if (e.key >= 0 && e.key <= 9) appendNumber(e.key);
     if (e.key === '.') appendDecimal();
-    if (e.key === '=' || e.key === 'Enter') calculate();
+    if (e.key === '=') calculate();
     if (e.key === 'Backspace') deleteLastDigit();
     if (e.key === 'Escape') clearInput(); //refactor
     if (e.key === '+' || e.key === '-' || e.key === '*' || e.key === '/') setOperation(convertOperator(e.key));
