@@ -11,72 +11,41 @@ const positiveNegative = document.getElementById('positive-negative');
 const equalButton = document.getElementById('equal');
 
 
-// button event listeners
-clearButton.addEventListener('click', clearInput);
-deleteButton.addEventListener('click', deleteLastDigit);
-positiveNegative.addEventListener('click', togglePositiveNegative);
-equalButton.addEventListener('click', calculate);
-pointButton.addEventListener("click", appendDecimal);
-
 // input variables for screen calculations
-let currentInput = '0';
+let firstInput = '';
 let lastInput = '';
 let operator = '';
-let shouldReset = true;
-currentOperation = null;
+let shouldReset = false;
+let currentOperation = null;
 
 // lastScreen.textContent = '';
 
 // Screen functionality 
-const displayCurrentInput = () => {
-    currentScreen.textContent = currentInput;
+const resetScreen = () => {
+    currentScreen.textContent = '';
+    shouldReset = false;
 };
-displayCurrentInput();
 
-const displayLastInput = () => {
-    lastScreen.textContent = lastInput;
-};
-displayLastInput();
+const appendNumber = (number) => {
+    // only append if operation is not set 
+    if (currentScreen.textContent === '0' || shouldReset) resetScreen();;
+    // resetScreen();
+    currentScreen.textContent += number;
+}
+
 
 const clearInput = () => {
-    currentInput = '0';
+    currentScreen.textContent = '0';
+    lastScreen.textContent = '';
+    firstInput = '';
     lastInput = '';
-    operator = '';
-    displayLastInput();
-    displayCurrentInput();
+    currentOperation = null;
 };
+
 
 const deleteLastDigit = () => {
-    if (currentInput.length > 1) {
-        currentInput = currentInput.slice(0, -1);
-    } else {
-        currentInput = '0';
-    };
-    displayCurrentInput();
-};
-
-// add number to the display string 
-const handleNumberClick = (num) => {
-    if (currentInput === '0' || currentInput === '-0') {
-        currentInput = num.toString(num);
-    } else {
-        currentInput += num.toString(num);
-    };
-    displayCurrentInput();
-};
-
-// handles (+ * - /) buttons and last input window
-const handleOperatorClick = (op) => {
-    if (operator !== '0' && lastInput !== '0') {
-        calculate();
-    };
-    operator = op;
-    lastInput = `${currentInput} ${op} `;
-    currentInput = '0';
-    // currentInput = currentScreen.textContent;
-    displayLastInput();
-    displayCurrentInput();
-};
+    currentScreen.textContent = currentScreen.textContent.toString().slice(0, -1);
+}
 
 // deals with decimal vals
 const appendDecimal = () => {
@@ -90,12 +59,44 @@ const appendDecimal = () => {
     currentScreen.textContent += '.';
 };
 
+const setOperation = (operator) => {
+    // if current operator not empty means equation is ready for eval
+    if (currentOperation !== null) calculate(); //create funct
+    firstInput = currentScreen.textContent;
+    currentOperation = operator;
+    lastScreen.textContent = `${firstInput} ${currentOperation}`;
+    // reset the current screen for the 3rd input
+    shouldReset = true;
+};
+
+function calculate() {
+    // don't calculate until the operator been provided and last input has been added to current screen..alolows change in operator
+    if (currentOperation === 'null' || shouldReset) return;
+    // check if dividing by zero
+    if (currentOperation === '÷' && currentScreen.textContent === '0') {
+        alert('You can\'t divide by zero');
+        return;
+    };
+    lastInput = currentScreen.textContent;
+    // currentScreen.textContent = roundCalc(operate(currentOperation, firstInput, lastInput));
+    currentScreen.textContent = roundCalc(
+        operate(currentOperation, firstInput, lastInput)
+    )
+    lastScreen.textContent = `${firstInput} ${currentOperation} ${lastInput} =`;
+    // set current  operation to empty after eval for new eval
+    currentOperation = null;
+};
+
+const roundCalc = (number) => {
+    return Math.round(number * 1000) / 1000;
+}
+
 const handleKeyboardInput = (e) => {
     if (e.key >= 0 && e.key <= 9) appendNumber(e.key); //create this funct
     if (e.key === '.') appendDecimal();
-    if (e.key === '=' || e.key === 'Enter') evaluate();
+    if (e.key === '=' || e.key === 'Enter') calculate(); //create funct
     if (e.key === 'Backspace') deleteLastDigit();
-    if (e.key === 'Escape') clear(); //refactor
+    if (e.key === 'Escape') clearInput(); //refactor
     if (e.key === '+' || e.key === '-' || e.key === '*' || e.key === '/') setOperation(convertOperator(e.key));
 };
 
@@ -103,74 +104,77 @@ const handleKeyboardInput = (e) => {
 const convertOperator = (keyboardOperator) => {
     if (keyboardOperator === '/') return '÷';
     if (keyboardOperator === '*') return '×';
-    if (keyboardOperator === '-') return '−';
+    if (keyboardOperator === '-') return '-';
     if (keyboardOperator === '+') return '+';
 };
 
-const calculate = () => {
-    const num1 = parseFloat(lastInput);
-    const num2 = parseFloat(currentInput);
-
-    switch (operator) {
-        case '+':
-            currentInput = (num1 + num2).toString();
-            break;
-        case '-':
-            currentInput = (num1 - num2).toString();
-            break;
-        case '*':
-            currentInput = (num1 * num2).toString();
-            break;
-        case '÷':
-            currentInput = (num1 / num2).toString();
-            break;
-        default:
-            return;
-    };
-
-    // reset the operator and last input after calc
-    operator = '';
-    // lastInput = lastInput + currentInput;
-    lastInput += `${num2} ${equalButton.textContent}`;
-    displayLastInput();
-    displayCurrentInput();
+let add = (a, b) => {
+    return a + b;
 };
 
+let subtract = (a, b) => {
+    return a - b;
+};
+
+let multiply = (a, b) => {
+    return a * b;
+};
+
+let divide = (a, b) => {
+    return a / b
+};
+
+let operate = (operator, a, b) => {
+    // convert a,b to the number type
+    a = Number(a);
+    b = Number(b);
+    switch (operator) {
+        case '+':
+            return add(a, b)
+        case '-':
+            return subtract(a, b)
+        case '×':
+            return multiply(a, b)
+        case '÷':
+            if (b === 0) return null
+            else return divide(a, b)
+        // if improper inputs return nothing
+        default:
+            return null;
+    };
+};
+
+
 const togglePositiveNegative = () => {
-    if (currentInput !== '0') {
-        if (currentInput[0] === '-') {
+    if (currentScreen.textContent !== '0') {
+        if (currentScreen.textContent[0] === '-') {
             // make positive
-            currentInput = currentInput.slice(1);
+            currentScreen.textContent = currentScreen.textContent.slice(1);
         } else {
             // make negative
-            currentInput = '-' + currentInput;
+            currentScreen.textContent = '-' + currentScreen.textContent;
         }
     };
-    displayCurrentInput();
 };
 
 // button functionality
 let value = numberButtons.forEach(btn => {
     btn.addEventListener("click", () => {
-        // console.log(btn.textContent);
-        // currentScreen.textContent = `${btn.textContent}`;
-        // return btn.textContent;
-        handleNumberClick(btn.textContent);
+        appendNumber(btn.textContent);
     })
 });
 
 let operators = operatorButtons.forEach(operator => {
     operator.addEventListener("click", () => {
-
-        // if (currentInput !== '0') { handleOperatorClick(operator.textContent); }
-        handleOperatorClick(operator.textContent);
-        // lastInput = `${lastInput} ${currentInput}`;
-        // lastInput += ' =';
-        // lastInput = lastInput.replaceAt(lastInput.length - 1, equalButton.textContent);
+        setOperation(operator.textContent);
     });
 });
 
-// replaceAt string function
-String.prototype.replaceAt = function (index, replacement) {
-    return this.substring(0, index) + replacement + this.substring(index + replacement.length);
-};
+
+// button event listeners
+window.addEventListener('keydown', handleKeyboardInput)
+clearButton.addEventListener('click', clearInput);
+deleteButton.addEventListener('click', deleteLastDigit);
+positiveNegative.addEventListener('click', togglePositiveNegative);
+equalButton.addEventListener('click', calculate);
+pointButton.addEventListener('click', appendDecimal);
