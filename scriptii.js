@@ -49,7 +49,7 @@ const deleteLastDigit = () => {
 
 // deals with decimal vals
 const appendDecimal = () => {
-    // reset screen if eval func or other func triggers it to be true
+    // reset screen if calc func or other func triggers it to be true
     if (shouldReset) resetScreen();
     // if empty input while decimal has been clicked auto add zero before the decimal
     if (currentScreen.textContent === '') currentScreen.textContent = '0';
