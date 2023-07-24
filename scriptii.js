@@ -18,7 +18,7 @@ let operator = '';
 let shouldReset = false;
 let currentOperation = null;
 
-// lastScreen.textContent = '';
+currentScreen.textContent = '0'
 
 // Screen functionality 
 const resetScreen = () => {
@@ -29,11 +29,11 @@ const resetScreen = () => {
 const appendNumber = (number) => {
     // only append if operation is not set 
     if (currentScreen.textContent === '0' || shouldReset) resetScreen();;
-    // resetScreen();
     currentScreen.textContent += number;
 }
 
 
+// For clear button
 const clearInput = () => {
     currentScreen.textContent = '0';
     lastScreen.textContent = '';
@@ -43,6 +43,7 @@ const clearInput = () => {
 };
 
 
+// For delete button
 const deleteLastDigit = () => {
     currentScreen.textContent = currentScreen.textContent.toString().slice(0, -1);
 }
@@ -50,7 +51,7 @@ const deleteLastDigit = () => {
 // deals with decimal vals
 const appendDecimal = () => {
     // reset screen if eval func or other func triggers it to be true
-    if (shouldReset) resetScreen(); //create this funct
+    if (shouldReset) resetScreen();
     // if empty input while decimal has been clicked auto add zero before the decimal
     if (currentScreen.textContent === '') currentScreen.textContent = '0';
     // handles if input already has decimal so multiples can't be added
@@ -61,7 +62,7 @@ const appendDecimal = () => {
 
 const setOperation = (operator) => {
     // if current operator not empty means equation is ready for eval
-    if (currentOperation !== null) calculate(); //create funct
+    if (currentOperation !== null) calculate();
     firstInput = currentScreen.textContent;
     currentOperation = operator;
     lastScreen.textContent = `${firstInput} ${currentOperation}`;
@@ -71,7 +72,7 @@ const setOperation = (operator) => {
 
 function calculate() {
     // don't calculate until the operator been provided and last input has been added to current screen..alolows change in operator
-    if (currentOperation === 'null' || shouldReset) return;
+    if (currentOperation === null || shouldReset) return;
     // check if dividing by zero
     if (currentOperation === '÷' && currentScreen.textContent === '0') {
         alert('You can\'t divide by zero');
@@ -92,9 +93,9 @@ const roundCalc = (number) => {
 }
 
 const handleKeyboardInput = (e) => {
-    if (e.key >= 0 && e.key <= 9) appendNumber(e.key); //create this funct
+    if (e.key >= 0 && e.key <= 9) appendNumber(e.key);
     if (e.key === '.') appendDecimal();
-    if (e.key === '=' || e.key === 'Enter') calculate(); //create funct
+    if (e.key === '=' || e.key === 'Enter') calculate();
     if (e.key === 'Backspace') deleteLastDigit();
     if (e.key === 'Escape') clearInput(); //refactor
     if (e.key === '+' || e.key === '-' || e.key === '*' || e.key === '/') setOperation(convertOperator(e.key));
