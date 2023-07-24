@@ -9,7 +9,7 @@ const deleteButton = document.querySelector(".delete");
 const pointButton = document.querySelector(".point");
 const positiveNegative = document.getElementById('positive-negative');
 const equalButton = document.getElementById('equal');
-
+currentScreen.textContent = '0';
 
 // input variables for screen calculations
 let firstInput = '';
@@ -18,7 +18,6 @@ let operator = '';
 let shouldReset = false;
 let currentOperation = null;
 
-currentScreen.textContent = '0'
 
 // Screen functionality 
 const resetScreen = () => {
